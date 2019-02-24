@@ -1,12 +1,23 @@
-package Laboratory1;
+package Optional;
+
 
 public class SecondClass {
 
     public static void main(String[] args) {
-        matriceAdiacentaGrafComplet(args);
-        matriceAdiacentaGrafCiclic(args);
-    }
 
+        int[][] myMatrix = matriceAdiacentaGrafComplet(args);
+        afisareMatrice(myMatrix);
+        numarulMuchiilor(myMatrix);
+
+        int[][] myMatrix2 = matriceAdiacentaGrafCiclic(args);
+        afisareMatrice(myMatrix2);
+        numarulMuchiilor(myMatrix2);
+
+        int[][] myMatrix3 = matriceGrafRandom(args);
+        afisareMatrice(myMatrix3);
+        numarulMuchiilor(myMatrix3);
+
+    }
 
     public static int readVertex (String[] args)
     {
@@ -25,7 +36,7 @@ public class SecondClass {
     }
 
 
-    public static void matriceAdiacentaGrafComplet(String[] args)
+    public static int[][] matriceAdiacentaGrafComplet(String[] args)
     {
         int n = readVertex(args);
         int[][] matrixCompleteGraph = new int[n][n];
@@ -36,22 +47,16 @@ public class SecondClass {
         else
                     matrixCompleteGraph[i][j]=1;
 
-        for(int i =0; i<n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(matrixCompleteGraph[i][j] + " ");
-            }
-            System.out.println(" ");
-        }
-        System.out.println("\n");
+        return matrixCompleteGraph;
     }
 
-    public static void matriceAdiacentaGrafCiclic(String[] args)
+    public static int[][] matriceAdiacentaGrafCiclic(String[] args)
     {
         int n = readVertex(args);
         int[][] matrixCycle = new int[n][n];
 
-       for(int i=1;i<n;i++)
-           for(int j=1;j<n;j++) {
+       for(int i=0;i<n;i++)
+           for(int j=0;j<n;j++) {
                if (j == i + 1) {
                    matrixCycle[i][j] = 1;
                    matrixCycle[j][i] = 1;
@@ -60,14 +65,52 @@ public class SecondClass {
                matrixCycle[0][n - 1] = 1;
                matrixCycle[n - 1][0] = 1;
            }
+         return matrixCycle;
+    }
 
-           for(int i =0; i<n; i++) {
+    public static int[][] matriceGrafRandom(String[] args)
+    {
+        int n = readVertex(args);
+        int[][] matrixGrafRandom = new int[n][n];
+
+        for (int i = 1; i < n; i++)
+            for (int j = 1; j < n; j++)
+            if (i < j)
+            {
+                matrixGrafRandom[i][j] = (int) (Math.random()*10 % 2);
+                matrixGrafRandom[j][i] = matrixGrafRandom[i][j];
+            }
+
+        return matrixGrafRandom;
+    }
+
+
+    public static void afisareMatrice(int[][] myMatrix)
+    {
+        int n = myMatrix[0].length;
+
+        for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                System.out.print(matrixCycle[i][j] + " ");
+                System.out.print(myMatrix[i][j] + " ");
             }
             System.out.println(" ");
         }
         System.out.println(" ");
+
+    }
+
+    public static void numarulMuchiilor(int[][] myMatrix )
+    {
+        int n = myMatrix[0].length;
+        int edges = 0;
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (i < j && myMatrix[i][j] == 1) {
+                    edges++;
+                }
+
+        System.out.println("Graful are " + edges + " muchii. \n");
     }
 
 }

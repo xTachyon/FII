@@ -1,22 +1,32 @@
 package Optional;
 
-
 public class SecondClass {
 
     public static void main(String[] args) {
-
+        final long startTime = System.nanoTime();
         int[][] myMatrix = matriceAdiacentaGrafComplet(args);
         afisareMatrice(myMatrix);
         numarulMuchiilor(myMatrix);
+        minimVertexDegree(myMatrix);
+        maximVertexDegree(myMatrix);
+        sumOfVertexDegrees(myMatrix);
 
         int[][] myMatrix2 = matriceAdiacentaGrafCiclic(args);
         afisareMatrice(myMatrix2);
         numarulMuchiilor(myMatrix2);
+        minimVertexDegree(myMatrix2);
+        maximVertexDegree(myMatrix2);
+        sumOfVertexDegrees(myMatrix2);
 
         int[][] myMatrix3 = matriceGrafRandom(args);
         afisareMatrice(myMatrix3);
         numarulMuchiilor(myMatrix3);
+        minimVertexDegree(myMatrix3);
+        maximVertexDegree(myMatrix3);
+        sumOfVertexDegrees(myMatrix3);
 
+        final long duration = System.nanoTime() - startTime;
+        System.out.println("Timpul de executie, in nanosecunde, este " + duration);
     }
 
     public static int readVertex (String[] args)
@@ -29,7 +39,6 @@ public class SecondClass {
             } catch (NumberFormatException e) {
                 System.err.println("Argument" + args[0] + " must be an integer.");
                 System.exit(1);
-
             }
         }
         return 0;
@@ -46,7 +55,6 @@ public class SecondClass {
                     matrixCompleteGraph[i][j]=0;
         else
                     matrixCompleteGraph[i][j]=1;
-
         return matrixCompleteGraph;
     }
 
@@ -57,9 +65,9 @@ public class SecondClass {
 
        for(int i=0;i<n;i++)
            for(int j=0;j<n;j++) {
-               if (j == i + 1) {
+               if ( j == i + 1) {
                    matrixCycle[i][j] = 1;
-                   matrixCycle[j][i] = 1;
+                   matrixCycle[j][i] =  matrixCycle[i][j];
                } else
                    matrixCycle[i][j] = 0;
                matrixCycle[0][n - 1] = 1;
@@ -73,17 +81,15 @@ public class SecondClass {
         int n = readVertex(args);
         int[][] matrixGrafRandom = new int[n][n];
 
-        for (int i = 1; i < n; i++)
-            for (int j = 1; j < n; j++)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
             if (i < j)
             {
                 matrixGrafRandom[i][j] = (int) (Math.random()*10 % 2);
                 matrixGrafRandom[j][i] = matrixGrafRandom[i][j];
             }
-
         return matrixGrafRandom;
     }
-
 
     public static void afisareMatrice(int[][] myMatrix)
     {
@@ -99,7 +105,7 @@ public class SecondClass {
 
     }
 
-    public static void numarulMuchiilor(int[][] myMatrix )
+    public static int numarulMuchiilor(int[][] myMatrix )
     {
         int n = myMatrix[0].length;
         int edges = 0;
@@ -110,12 +116,56 @@ public class SecondClass {
                     edges++;
                 }
 
-        System.out.println("Graful are " + edges + " muchii. \n");
+        System.out.println("Graful are " + edges + " muchii.");
+        return edges;
+    }
+
+    public static void minimVertexDegree(int[][] myMatrix )
+    {
+        int n = myMatrix[0].length;
+        int min = n, nr_ap = 0;
+
+        for (int i = 0; i < n; i++) {
+            nr_ap = 0;
+            for (int j = 0; j < n; j++)
+                if (myMatrix[i][j] == 1)
+                    nr_ap++;
+            if (nr_ap < min)
+                min = nr_ap;
+        }
+
+        System.out.println("Gradul minim al unui nod in matricea data este: "  + min);
+    }
+
+    public static void maximVertexDegree(int[][] myMatrix )
+    {
+        int n = myMatrix[0].length;
+        int max = -1, nr_ap = 0;
+
+        for (int i = 0; i < n; i++) {
+            nr_ap = 0;
+            for (int j = 0; j < n; j++)
+                if (myMatrix[i][j] == 1)
+                    nr_ap++;
+            if (nr_ap > max)
+                max = nr_ap;
+        }
+
+        System.out.println("Gradul maxim al unui nod in matricea data este: "  + max);
+    }
+
+    public static int sumOfVertexDegrees(int[][] myMatrix )
+    {
+        int n = myMatrix[0].length;
+        int nr_ap = 0;
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (myMatrix[i][j] == 1)
+                    nr_ap++;
+
+        System.out.println("Suma gradelor nodurilor matricii este " + nr_ap + "\n");
+        return nr_ap;
     }
 
 }
-
-
-
-
-
